@@ -29,16 +29,23 @@ except ImportError:
 """Metadata"""
 from libmotop import __name__, __version__, __doc__
 
-"""Main configuration"""
+"""Main configuration
+   主要配置
+"""
 configFile = '/etc/motop.conf'
 optionalVariables = ('username', 'password')
 choices = ('status', 'replicationInfo', 'replicaSet', 'operations', 'replicationOperations')
 
+
 def version():
     return __name__ + ' ' + str(__version__)
 
+
 def parseArguments():
-    """Create ArgumentParser instance. Return parsed arguments."""
+    """
+    Create ArgumentParser instance. Return parsed arguments.
+    创建ArgumentParser实例。 返回解析的参数
+    """
     from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter, description=__doc__)
     parser.add_argument('hosts', metavar='host', nargs='*', default=('localhost:27017',),
@@ -53,7 +60,10 @@ def parseArguments():
     return parser.parse_args()
 
 def commonServers(config, arguments):
-    """First try to match servers on the config with the ones on the arguments."""
+    """
+    First try to match servers on the config with the ones on the arguments.
+    首先尝试匹配配置上的服务器与参数的服务器
+    """
     servers = []
     for host in arguments.hosts:
         for section in config.sections():
@@ -62,16 +72,25 @@ def commonServers(config, arguments):
     if servers:
         return servers
 
-    """Second use the servers on the config."""
+    """
+    Second use the servers on the config.
+    第二次使用配置文件配置服务器
+    """
     if config.sections():
         return [Server(section, **dict(config.items(section))) for section in config.sections()]
 
-    """Third use the servers on the arguments."""
+    """
+    Third use the servers on the arguments.
+    第三次使用参数配置服务器
+    """
     return [Server(host, host, arguments.username, arguments.password) for host in arguments.hosts]
 
 def run():
-    """Get the arguments and parse the config file. Activate console. Get servers from the config file
-    or from arguments. Show the query screen."""
+    """
+    Get the arguments and parse the config file. Activate console. Get servers from the config file
+    or from arguments. Show the query screen.
+    获取参数并解析配置文件。 激活控制台。 从配置文件或参数中获取服务器,显示查询屏幕
+    """
     arguments = parseArguments()
     config = SafeConfigParser({'username': arguments.username, 'password': arguments.password})
     config.read(arguments.conf)

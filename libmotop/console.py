@@ -36,7 +36,10 @@ import numbers
 from datetime import datetime
 
 class Console:
-    """Main class for input and output. Used with "with" statement to hide pressed buttons on the console."""
+    """
+    Main class for input and output. Used with "with" statement to hide pressed buttons on the console.
+    输入和输出的主类。 与“with”语句一起使用以隐藏控制台上按下的按钮
+    """
     def __init__(self):
         self.__deactiveConsole = DeactiveConsole(self)
         self.__saveSize()
@@ -44,7 +47,10 @@ class Console:
         self.__lastCheckTime = None
 
     def __enter__(self):
-        """Hide pressed buttons on the console."""
+        """
+        Hide pressed buttons on the console.
+        隐藏在控制台上按下的按钮
+        """
         try:
             self.__settings = termios.tcgetattr(sys.stdin)
             tty.setcbreak(sys.stdin.fileno())
@@ -69,7 +75,10 @@ class Console:
             except IOError: pass
 
     def checkButton(self, waitTime):
-        """Check one character input. Waits for approximately waitTime parameter as seconds."""
+        """
+        Check one character input. Waits for approximately waitTime parameter as seconds.
+        检查一个字符输入。等待时间大约为数秒,主要看参数.
+        """
         if self.__lastCheckTime:
             timedelta = datetime.now() - self.__lastCheckTime
             waitTime -= timedelta.seconds + (timedelta.microseconds / 1000000.0)
@@ -82,7 +91,10 @@ class Console:
             return sys.stdin.read(1)
 
     def refresh(self, blocks):
-        """Print the blocks with height and width left on the screen."""
+        """
+        Print the blocks with height and width left on the screen.
+        打印屏幕上的块剩高度和宽度
+        """
         os.system('clear')
         leftHeight = self.__height
         for block in blocks:
@@ -103,7 +115,10 @@ class Console:
             except IOError: pass
 
     def askForInput(self, *attributes):
-        """Ask for input for given attributes in given order."""
+        """
+        Ask for input for given attributes in given order.
+        在一定秩序要求输入给定的属性
+        """
         with self.__deactiveConsole:
             print()
             values = []
@@ -115,7 +130,10 @@ class Console:
             return values
 
 class DeactiveConsole:
-    """Class to use with "with" statement as "wihout" statement for Console class defined below."""
+    """
+    Class to use with "with" statement as "wihout" statement for Console class defined below.
+    使用“with”语句作为“without”语句的类用于下面定义的Console类
+    """
     def __init__(self, console):
         self.__console = console
 
@@ -126,7 +144,10 @@ class DeactiveConsole:
         self.__console.__enter__()
 
 class Block:
-    """Class to print blocks of ordered printables."""
+    """
+    Class to print blocks of ordered printables.
+    打印有序打印块的类
+    """
     def __init__(self, columnHeaders):
         self.__columnHeaders = columnHeaders
         self.__columnWidths = [6] * len(self.__columnHeaders)
